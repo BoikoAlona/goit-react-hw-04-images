@@ -31,7 +31,7 @@ export const App = () => {
         setStatus(STATUSES.pending);
         const { hits, totalHits } = await requestImagesByQuery(q, page);
         setStatus(STATUSES.success);
-        setHits(hits);
+        setHits(prevState => [...prevState, ...hits]);
         setIsLoadMore(page < Math.ceil(totalHits / 12));
       } catch (error) {
         setError(error.message);
@@ -42,7 +42,7 @@ export const App = () => {
   }, [q, page]);
 
   const onLoadMore = () => {
-    setPage(prevState => prevState.page + 1);
+    setPage(prevState => prevState + 1);
   };
 
   return (
