@@ -17,10 +17,13 @@ export const App = () => {
 
   const onSubmit = q => {
     setQ(q);
+    setPage(1);
+    setHits([]);
+    setIsLoadMore(false);
   };
 
   useEffect(() => {
-    if (q === '') {
+    if (q === '' && page === 1) {
       return;
     }
     const fetchImagesbyQuery = async () => {
@@ -28,8 +31,8 @@ export const App = () => {
         setStatus(STATUSES.pending);
         const { hits, totalHits } = await requestImagesByQuery(q, page);
         setStatus(STATUSES.success);
-        setHits(prevState => [...prevState, ...hits]);
-        setIsLoadMore(prevState => page < Math.ceil(totalHits / 12));
+        setHits(hits);
+        setIsLoadMore(page < Math.ceil(totalHits / 12));
       } catch (error) {
         setError(error.message);
         setStatus(STATUSES.error);
